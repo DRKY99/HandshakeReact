@@ -1,10 +1,14 @@
-import logo from "./logo.svg";
+import { Container } from "react-bootstrap";
 import "./App.css";
-import { Button } from "react-bootstrap";
+import SignUp from "./Views/signup/Signup";
+import Routes from "./Routes";
+
 function App() {
 	return (
 		<div className="App">
-			<Button> OK</Button>
+			<Container style={{ height: "100%" }}>
+				<Routes />
+			</Container>
 		</div>
 	);
 }
