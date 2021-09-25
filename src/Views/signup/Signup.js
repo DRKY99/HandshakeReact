@@ -22,19 +22,19 @@ export default function Signup() {
 			<Card style={{ minHeight: "400px" }}>
 				<Card.Body className="h-100">
 					<Container className="h-100">
-						<Card.Title>SignUp into Handshake</Card.Title>
+						<Card.Title>Registrate a HandShake</Card.Title>
 						<Form
 							className="h-100 p-10 m-10 "
 							onSubmit={handleOnSubmit}
 						>
 							<Form.Group controlId="formBasicEmail">
 								<Form.Label className="text-start w-100 mt-3">
-									Nickname
+									Usuario
 								</Form.Label>
 								<Form.Control
 									name="nickname"
 									type="text"
-									placeholder="Enter nickname"
+									placeholder="Ingresa tu usuario"
 								/>
 							</Form.Group>
 							<Form.Group controlId="formBasicEmail">
@@ -44,25 +44,25 @@ export default function Signup() {
 								<Form.Control
 									name="email"
 									type="email"
-									placeholder="Enter nickname"
+									placeholder="Ingresa tu email"
 								/>
 							</Form.Group>
 							<Form.Group controlId="formBasicEmail">
 								<Form.Label className="text-start w-100 mt-3">
-									Passphrase
+									Frase de seguridad
 								</Form.Label>
 								<Form.Control
 									name="passphrase"
 									type="password"
-									placeholder="Enter passphrase"
+									placeholder="Ingresa tu frase de seguridad"
 								/>
 								<Form.Text className="text-muted">
-									Your data will be encrypted locally
+									Tus datos serán almacenados y encriptados de forma local
 								</Form.Text>
 							</Form.Group>
 							<div className="d-grid gap-2 mt-4 align-self-end">
 								<Button variant="primary" type="submit">
-									Submit
+									Guardar
 								</Button>
 							</div>
 						</Form>
