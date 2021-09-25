@@ -9,7 +9,7 @@ export default function Signup() {
 	const handleOnSubmit = async (event) => {
 		event.preventDefault();
 		await singIn(event.target.passphrase.value);
-		history.push("/home");
+		history.push("/settings/Level2");
 	};
 
 	return (

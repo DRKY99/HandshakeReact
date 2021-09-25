@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Button,
 	Card,
@@ -19,10 +19,11 @@ import {
 	faGithub,
 	faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+import { Auth } from "../../hook";
 
 export default function Settings() {
 	const [dropdownTitle, setDropdownTitle] = useState("LADA");
-
+	const { setLevelOne } = useContext(Auth.Context);
 	//Show and close modal
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
@@ -30,7 +31,12 @@ export default function Settings() {
 
 	const handleOnSubmit = async (event) => {
 		event.preventDefault();
-		console.log(event.target.value);
+		console.log(event.target.phone.value);
+		setLevelOne(
+			event.target.firstname.value,
+			event.target.lastname.value,
+			event.target.phone.value
+		);
 		//await signUp(event.target.nickname.value, event.target.payload.value);
 	};
 	return (
@@ -108,6 +114,7 @@ export default function Settings() {
 											<Form.Control
 												id="phoneNumber"
 												type="tel"
+												name="phone"
 												placeholder="Ingresa tu número de teléfono"
 											/>
 										</InputGroup>

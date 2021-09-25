@@ -30,6 +30,11 @@ export default function (state, action) {
 				...state,
 				...payload,
 			};
+		case "SET_LVLONE":
+			return {
+				...state,
+				levelOne: payload,
+			};
 		default:
 			console.log("ERROR_CODE_404");
 			return state;

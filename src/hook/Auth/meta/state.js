@@ -5,7 +5,8 @@ import Links from "../../../constants/Links";
 import { generateKey } from "openpgp";
 import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto-js";
-
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 const UserState = (props) => {
 	const initialState = {
 		id: null,
@@ -13,9 +14,13 @@ const UserState = (props) => {
 		private_key: null,
 		revocation_certificade: null,
 		vinculation_code: null,
+		levelOne: {
+			firstname: null,
+			lastname: null,
+			phone: null,
+		},
 	};
 	const [state, dispatch] = useReducer(Reducer, initialState);
-
 	const singIn = (passphrase) => {
 		const payload = {
 			remote_key: crypto.AES.decrypt(
@@ -42,6 +47,7 @@ const UserState = (props) => {
 			).toString(crypto.enc.Utf8),
 		};
 		dispatch({ type: "SET_GENERIC", payload });
+		cookies.set("passphrase", passphrase, { path: "/" });
 	};
 
 	const signUp = async (nickname, email, passphrase) => {
@@ -78,12 +84,6 @@ const UserState = (props) => {
 							},
 						});
 						try {
-							console.log(
-								crypto.AES.encrypt(
-									data.id.toString(),
-									passphrase
-								).toString()
-							);
 							localStorage.setItem(
 								"remote_key",
 								crypto.AES.encrypt(
@@ -109,7 +109,7 @@ const UserState = (props) => {
 								"private_key",
 								crypto.AES.encrypt(
 									keys.privateKey.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 							localStorage.setItem(
@@ -137,7 +137,45 @@ const UserState = (props) => {
 			});
 	};
 
-	// const setLevelOne = async (firstname,lastname, phone) =>
+	const setLevelOne = async (firstname, lastname, phone) => {
+		const passphrase = cookies.get("passphrase");
+		dispatch({
+			type: "SET_LVLONE",
+			payload: {
+				firstname,
+				lastname,
+				phone,
+			},
+		});
+		try {
+			localStorage.setItem(
+				"firstname",
+				crypto.AES.encrypt(firstname.toString(), passphrase).toString()
+			);
+			localStorage.setItem(
+				"lastname",
+				crypto.AES.encrypt(lastname.toString(), passphrase).toString()
+			);
+			localStorage.setItem(
+				"phone",
+				crypto.AES.encrypt(phone.toString(), passphrase).toString()
+			);
+		} catch (error) {
+			console.log(error);
+		}
+		console.log(state.id);
+		await fetch(Links.API + "user/lvl_one/" + state.id, {
+			method: "GET",
+			headers: {
+				"Content-type": "Application/json",
+			},
+		})
+			.then((data) => data.json())
+			.then((data) => {
+				alert(JSON.stringify(data));
+			})
+			.catch(() => alert("Something went wrong"));
+	};
 
 	return (
 		<Context.Provider
@@ -146,8 +184,10 @@ const UserState = (props) => {
 				vinculation_code: state.vinculation_code,
 				private_key: state.private_key,
 				public_key: state.public_key,
+				levelOne: state.levelOne,
 				signUp,
 				singIn,
+				setLevelOne,
 			}}
 		>
 			{props.children}
