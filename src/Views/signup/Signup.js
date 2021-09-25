@@ -1,13 +1,20 @@
 import React, { useContext } from "react";
 import { Container, Card, Form, Button } from "react-bootstrap";
 import { Auth } from "../../hook";
-
+import { useHistory } from "react-router-dom";
 export default function Signup() {
-	const { id, signUp } = useContext(Auth.Context);
+	const { signUp } = useContext(Auth.Context);
+	const history = useHistory();
 
 	const handleOnSubmit = async (event) => {
 		event.preventDefault();
-		await signUp(event.target.nickname.value, event.target.payload.value);
+		const response = await signUp(
+			event.target.nickname.value,
+			event.target.email.value,
+			event.target.passphrase.value
+		);
+		console.log(response);
+		if (response) history.push("/vinculate");
 	};
 
 	return (
@@ -32,13 +39,26 @@ export default function Signup() {
 							</Form.Group>
 							<Form.Group controlId="formBasicEmail">
 								<Form.Label className="text-start w-100 mt-3">
-									Payload
+									Email
 								</Form.Label>
 								<Form.Control
-									name="payload"
-									type="text"
-									placeholder="Enter payload"
+									name="email"
+									type="email"
+									placeholder="Enter nickname"
 								/>
+							</Form.Group>
+							<Form.Group controlId="formBasicEmail">
+								<Form.Label className="text-start w-100 mt-3">
+									Passphrase
+								</Form.Label>
+								<Form.Control
+									name="passphrase"
+									type="password"
+									placeholder="Enter passphrase"
+								/>
+								<Form.Text className="text-muted">
+									Your data will be encrypted locally
+								</Form.Text>
 							</Form.Group>
 							<div className="d-grid gap-2 mt-4 align-self-end">
 								<Button variant="primary" type="submit">
