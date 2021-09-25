@@ -15,33 +15,34 @@ const UserState = (props) => {
 		vinculation_code: null,
 	};
 	const [state, dispatch] = useReducer(Reducer, initialState);
-	useEffect(() => {
+
+	const singIn = (passphrase) => {
 		const payload = {
 			remote_key: crypto.AES.decrypt(
 				localStorage.getItem("remote_key").toString(),
-				"123"
+				passphrase
 			).toString(crypto.enc.Utf8),
 			id: parseInt(
 				crypto.AES.decrypt(
 					localStorage.getItem("id").toString(),
-					"123"
+					passphrase
 				).toString(crypto.enc.Utf8)
 			),
 			public_key: crypto.AES.decrypt(
 				localStorage.getItem("public_key").toString(),
-				"123"
+				passphrase
 			).toString(crypto.enc.Utf8),
 			private_key: crypto.AES.decrypt(
 				localStorage.getItem("private_key").toString(),
-				"123"
+				passphrase
 			).toString(crypto.enc.Utf8),
 			revocation_certificade: crypto.AES.decrypt(
 				localStorage.getItem("revocation_certificade").toString(),
-				"123"
+				passphrase
 			).toString(crypto.enc.Utf8),
 		};
 		dispatch({ type: "SET_GENERIC", payload });
-	}, []);
+	};
 
 	const signUp = async (nickname, email, passphrase) => {
 		return await generateKey({
@@ -80,28 +81,28 @@ const UserState = (props) => {
 							console.log(
 								crypto.AES.encrypt(
 									data.id.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 							localStorage.setItem(
 								"remote_key",
 								crypto.AES.encrypt(
 									data.remote_key.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 							localStorage.setItem(
 								"id",
 								crypto.AES.encrypt(
 									data.id.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 							localStorage.setItem(
 								"public_key",
 								crypto.AES.encrypt(
 									keys.publicKey.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 							localStorage.setItem(
@@ -115,7 +116,7 @@ const UserState = (props) => {
 								"revocation_certificade",
 								crypto.AES.encrypt(
 									keys.revocationCertificate.toString(),
-									"123"
+									passphrase
 								).toString()
 							);
 						} catch (error) {
@@ -136,6 +137,8 @@ const UserState = (props) => {
 			});
 	};
 
+	// const setLevelOne = async (firstname,lastname, phone) =>
+
 	return (
 		<Context.Provider
 			value={{
@@ -144,6 +147,7 @@ const UserState = (props) => {
 				private_key: state.private_key,
 				public_key: state.public_key,
 				signUp,
+				singIn,
 			}}
 		>
 			{props.children}
